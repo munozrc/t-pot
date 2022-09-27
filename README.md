@@ -25,3 +25,4 @@ Para restablecer a la configuración inicial ejecutamos el siguiente comando
 ```bash
 cp compose/standard.yml ./tpot.yml
 ```
+[https://github.com/telekom-security/tpotce#network-interface-fails]()
