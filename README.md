@@ -25,4 +25,14 @@ Para restablecer a la configuración inicial ejecutamos el siguiente comando
 ```bash
 cp compose/standard.yml ./tpot.yml
 ```
-[https://github.com/telekom-security/tpotce#network-interface-fails]()
+[Error Network Service](https://github.com/telekom-security/tpotce#network-interface-fails)   
+[User Types](https://github.com/telekom-security/tpotce#required-ports)
+
+### Users
+
+| Type        | Name        | Password    |
+| ----------- | ----------- | ----------- |
+| OS          | tsect       | 1234        |
+| Admin Web   | tsect       | 1234        |
+| Tools Ngix  | tuser       | 1234        |
+
