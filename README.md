@@ -13,7 +13,7 @@ cd /opt/tpot/etc/
 ```
 
 ```bash
-curl -o tpot.yml https://raw.githubusercontent.com/munozrc/t-pot/main/compose/conpot.yml
+curl -o tpot.yml https://raw.githubusercontent.com/munozrc/t-pot/main/compose/industrial.yml
 ```
 
 ```bash
