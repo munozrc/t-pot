@@ -41,3 +41,7 @@ cp compose/standard.yml ./tpot.yml
 ```bash
 sudo nmap --script=s7-enumerate -p 102 <<ip-adress>>
 ```
+
+```bash
+tail -n 0 -f /data/conpot.log
+```
