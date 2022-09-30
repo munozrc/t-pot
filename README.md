@@ -38,4 +38,6 @@ cp compose/standard.yml ./tpot.yml
 
 ![image](https://user-images.githubusercontent.com/47870821/192424321-a4607148-156b-4618-a190-f4a41b1027a4.png)
 
-
+```bash
+sudo nmap --script=s7-enumerate -p 102 <<ip-adress>>
+```
