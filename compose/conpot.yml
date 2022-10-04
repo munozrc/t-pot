@@ -1,12 +1,13 @@
-# T-Pot (Standard)
-# Do not erase ports sections, these are used by /opt/tpot/bin/rules.sh to setup iptables ACCEPT rules for NFQ (honeytrap / glutton)
+# T-Pot (Conpot)
 version: '2.3'
 
 networks:
+  conpot_local_default:
   conpot_local_IEC104:
   conpot_local_guardian_ast:
   conpot_local_ipmi:
   conpot_local_kamstrup_382:
+  ewsposter_local:
   spiderfoot_local:
 
 services:
@@ -14,6 +15,35 @@ services:
 ##################
 #### Honeypots
 ##################
+
+# Conpot default service
+  conpot_default:
+    container_name: conpot_default
+    restart: always
+    environment:
+     - CONPOT_CONFIG=/etc/conpot/conpot.cfg
+     - CONPOT_JSON_LOG=/var/log/conpot/conpot_default.json
+     - CONPOT_LOG=/var/log/conpot/conpot_default.log
+     - CONPOT_TEMPLATE=default
+     - CONPOT_TMP=/tmp/conpot
+    tmpfs:
+     - /tmp/conpot:uid=2000,gid=2000
+    networks:
+     - conpot_local_default
+    ports:
+     - "69:69/udp"
+     - "80:80"
+     - "102:102"
+     - "161:161/udp"
+     - "502:502"
+#     - "623:623/udp"
+     - "21:21"
+     - "44818:44818"
+     - "47808:47808/udp"
+    image: "dtagdevsec/conpot:2204"
+    read_only: true
+    volumes:
+     - /data/conpot/log:/var/log/conpot
 
 # Conpot IEC104 service
   conpot_IEC104:
@@ -30,7 +60,7 @@ services:
     networks:
      - conpot_local_IEC104
     ports:
-     - "161:161/udp"
+#     - "161:161/udp"
      - "2404:2404"
     image: "dtagdevsec/conpot:2204"
     read_only: true
@@ -242,6 +272,28 @@ services:
     tty: true
     image: "dtagdevsec/map:2204"
 #### /ELK
+
+# Ewsposter service
+  ewsposter:
+    container_name: ewsposter
+    restart: always
+    networks:
+     - ewsposter_local
+    environment:
+     - EWS_HPFEEDS_ENABLE=false
+     - EWS_HPFEEDS_HOST=host
+     - EWS_HPFEEDS_PORT=port
+     - EWS_HPFEEDS_CHANNELS=channels
+     - EWS_HPFEEDS_IDENT=user
+     - EWS_HPFEEDS_SECRET=secret
+     - EWS_HPFEEDS_TLSCERT=false
+     - EWS_HPFEEDS_FORMAT=json
+    env_file:
+     - /opt/tpot/etc/compose/elk_environment
+    image: "dtagdevsec/ewsposter:2204"
+    volumes:
+     - /data:/data
+     - /data/ews/conf/ews.ip:/opt/ewsposter/ews.ip
 
 # Nginx service
   nginx:
