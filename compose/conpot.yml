@@ -7,8 +7,6 @@ networks:
   conpot_local_guardian_ast:
   conpot_local_ipmi:
   conpot_local_kamstrup_382:
-  ewsposter_local:
-  spiderfoot_local:
 
 services:
 
@@ -218,22 +216,6 @@ services:
      - "127.0.0.1:64296:5601"
     image: "dtagdevsec/kibana:2204"
 
-## Logstash service
-  logstash:
-    container_name: logstash
-    restart: always
-    environment:
-     - LS_JAVA_OPTS=-Xms1024m -Xmx1024m
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    env_file:
-     - /opt/tpot/etc/compose/elk_environment
-    mem_limit: 2g
-    image: "dtagdevsec/logstash:2204"
-    volumes:
-     - /data:/data
-
 ## Map Redis Service
   map_redis:
     container_name: map_redis
@@ -273,28 +255,6 @@ services:
     image: "dtagdevsec/map:2204"
 #### /ELK
 
-# Ewsposter service
-  ewsposter:
-    container_name: ewsposter
-    restart: always
-    networks:
-     - ewsposter_local
-    environment:
-     - EWS_HPFEEDS_ENABLE=false
-     - EWS_HPFEEDS_HOST=host
-     - EWS_HPFEEDS_PORT=port
-     - EWS_HPFEEDS_CHANNELS=channels
-     - EWS_HPFEEDS_IDENT=user
-     - EWS_HPFEEDS_SECRET=secret
-     - EWS_HPFEEDS_TLSCERT=false
-     - EWS_HPFEEDS_FORMAT=json
-    env_file:
-     - /opt/tpot/etc/compose/elk_environment
-    image: "dtagdevsec/ewsposter:2204"
-    volumes:
-     - /data:/data
-     - /data/ews/conf/ews.ip:/opt/ewsposter/ews.ip
-
 # Nginx service
   nginx:
     container_name: nginx
@@ -317,15 +277,3 @@ services:
      - /data/nginx/cert/:/etc/nginx/cert/:ro
      - /data/nginx/conf/nginxpasswd:/etc/nginx/nginxpasswd:ro
      - /data/nginx/log/:/var/log/nginx/
-
-# Spiderfoot service
-  spiderfoot:
-    container_name: spiderfoot
-    restart: always
-    networks:
-     - spiderfoot_local
-    ports:
-     - "127.0.0.1:64303:8080"
-    image: "dtagdevsec/spiderfoot:2204"
-    volumes:
-     - /data/spiderfoot:/home/spiderfoot/.spiderfoot
